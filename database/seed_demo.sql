@@ -14,13 +14,13 @@ WHERE p.sku='HER-001' AND u.sigla='cj'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO cajas(sede_id,nombre)
-SELECT s.sede_id,'Caja principal (demo)' FROM sedes s WHERE s.nombre='Casuarinas'
+SELECT s.sede_id,'Caja principal (demo)' FROM sedes s WHERE s.nombre='Casuarinas' AND NOT EXISTS(SELECT 1 FROM cajas c WHERE c.sede_id=s.sede_id AND c.nombre='Caja principal (demo)')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO caja_sesiones(caja_id,usuario_apertura,usuario_cierre,monto_inicial,monto_final,diferencia,abierta_en,cerrada_en,estado)
 SELECT c.caja_id,u.usuario_id,u.usuario_id,200,583.50,383.50,'2026-11-10 08:00:00-05','2026-11-10 18:00:00-05','CERRADA'
 FROM cajas c CROSS JOIN usuarios u
-WHERE c.nombre='Caja principal (demo)' AND u.nombre_usuario='admin'
+WHERE c.nombre='Caja principal (demo)' AND c.estado=true AND u.nombre_usuario='admin'
 AND NOT EXISTS(SELECT 1 FROM caja_sesiones x WHERE x.caja_id=c.caja_id AND x.abierta_en='2026-11-10 08:00:00-05');
 
 INSERT INTO ventas(codigo_venta,sede_id,almacen_id,cliente_id,empleado_id,usuario_id,condicion_pago,fecha_venta,subtotal,impuesto_total,monto_total,estado)
