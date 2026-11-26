@@ -1,0 +1,6 @@
+{
+  "name": "vecor-comercial",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {"dev:api":"npm --prefix backend run dev","build:api":"npm --prefix backend run build","start:api":"npm --prefix backend start"}
+}

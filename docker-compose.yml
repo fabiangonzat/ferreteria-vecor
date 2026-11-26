@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: vecor-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vecor
+      POSTGRES_USER: vecor
+      POSTGRES_PASSWORD: vecor_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - vecor_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/002-seed.sql:ro
+      - ./database/migrations/002_analytics.sql:/docker-entrypoint-initdb.d/003-analytics.sql:ro
+volumes:
+  vecor_data:
